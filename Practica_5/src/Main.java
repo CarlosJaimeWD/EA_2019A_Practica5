@@ -1,11 +1,16 @@
 import data.Processing;
+import java.io.File;
+import java.io.IOException;
 import templates.Persona;
+import org.apache.commons.io.input.ReversedLinesFileReader;
 
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
     ArrayList<Persona> personas = new ArrayList<>();
     ArrayList<Persona> outPersonas = new ArrayList<>();
@@ -41,7 +46,23 @@ public class Main {
             );
         }
         
-        Persona personaUltima = new Persona(outPersonas.get(outPersonas.size()-1).getNombre(), outPersonas.get(outPersonas.size()-1).getEdad(), outPersonas.get(outPersonas.size()-1).getEstatura(), outPersonas.get(outPersonas.size()-1).getPeso());
+        File file = new File("personas.txt");
+        ReversedLinesFileReader object = new ReversedLinesFileReader(file);
+        String line = object.readLine();
+        System.out.println(line);
+        String pattern = "\\(([^)]+)\\)\\(([^)]+)\\)\\(([^)]+)\\)\\(([^)]+)\\)";
+        Matcher matcher = Pattern.compile(pattern).matcher(line);
+        Persona personaUltima = null;
+        if (matcher.find()) {
+            personaUltima = new Persona(
+                                matcher.group(1),
+                                Integer.parseInt( matcher.group(2) ),
+                                Double.parseDouble( matcher.group(3) ),
+                                Integer.parseInt( matcher.group(4) )
+                        );
+        }
         System.out.println(personaUltima.toString());
+        
+
     }
 }
