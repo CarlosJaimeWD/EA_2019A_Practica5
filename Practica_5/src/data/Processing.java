@@ -3,6 +3,7 @@ import templates.Persona;
 
 import javax.imageio.stream.FileImageInputStream;
 import java.io.*;
+import java.lang.*;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -12,6 +13,7 @@ public class Processing {
     public void mostrarPersona(ArrayList<Persona> personas) {
         for (int i = 0; i < personas.size(); i++) {
             System.out.println(
+                    personas.get(i).getId() + " " +
                     personas.get(i).getNombre() + " " +
                             personas.get(i).getEdad() + " " +
                             personas.get(i).getEstatura() + " " +
@@ -33,6 +35,7 @@ public class Processing {
         try {
             for (int i = 0; i < personas.size(); i++) {
                 bufferedWriter.write(
+                        "(" + personas.get(i).getId() + ")" +
                         "(" + personas.get(i).getNombre() + ")" +
                                 "(" + personas.get(i).getEdad() + ")" +
                                 "(" + personas.get(i).getEstatura() + ")" +
@@ -64,14 +67,15 @@ public class Processing {
             try {
                 while ((thisLine = bufferedReader.readLine()) != null){
 //                    \\(([^)]+)\\)
-                    String pattern = "\\(([^)]+)\\)\\(([^)]+)\\)\\(([^)]+)\\)\\(([^)]+)\\)";
+                    String pattern = "\\(([^)]+)\\)\\(([^)]+)\\)\\(([^)]+)\\)\\(([^)]+)\\)\\(([^)]+)\\)";
                     Matcher matcher = Pattern.compile(pattern).matcher(thisLine);
                     if (matcher.find()){
                         outPersona.add( new Persona(
-                                matcher.group(1),
-                                Integer.parseInt( matcher.group(2) ),
-                                Double.parseDouble( matcher.group(3) ),
-                                Integer.parseInt( matcher.group(4) )
+                                Long.parseLong( matcher.group(1) ),
+                                matcher.group(2),
+                                Integer.parseInt( matcher.group(3) ),
+                                Double.parseDouble( matcher.group(4) ),
+                                Integer.parseInt( matcher.group(5) )
                         ));
                     }
                 }
